@@ -1,19 +1,6 @@
 import React from "react";
-import { useState } from "react";
 
-const Modal = ({ active, setActive, addCash, setSum }) => {
-  const [state, setState] = useState(0);
-
-  const change = (e) => {
-    e.preventDefault();
-    // if (num.test(e.target.value)) {
-    //   setState(e.target.value);
-    //   setSum(e.target.value);
-    // }
-    setState(e.target.value);
-    setSum(Number(e.target.value));
-  };
-
+const Modal = ({ active, setActive, children }) => {
   return (
     <div
       className={active ? "modal active" : "modal"}
@@ -23,14 +10,7 @@ const Modal = ({ active, setActive, addCash, setSum }) => {
         className={active ? "modal__content active" : "modal__content"}
         onClick={(e) => e.stopPropagation()}
       >
-        <input
-          value={state}
-          placeholder="Сумма..."
-          type="text"
-          className="input mb-10 text-center"
-          onChange={change}
-        />
-        <button onClick={() => addCash()}>Перевести на выбранный счет</button>
+        {children}
       </div>
     </div>
   );

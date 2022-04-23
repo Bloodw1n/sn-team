@@ -32,6 +32,8 @@ const Counter = ({ count, setSender, setReciver, setModel }) => {
       onDrop={(e) => dropHeandler(e)}
     >
       {count.count}
+      <br />
+      {count.name}
     </div>
   );
 };
