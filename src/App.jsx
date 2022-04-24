@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import userEvent from "@testing-library/user-event";
+import React, { useState, useEffect } from "react";
 import Basket from "./componets/Busket";
 import Counter from "./componets/Counter";
 import Modal from "./componets/Modal";
@@ -8,23 +9,29 @@ import Button from "./componets/UI/Button";
 import Input from "./componets/UI/Input";
 
 function App() {
-  const [count, setCount] = useState([
-    {
-      id: 1,
-      count: 100,
-      name: "счет 1",
-    },
-    {
-      id: 2,
-      count: 100,
-      name: "счет 2",
-    },
-    {
-      id: 3,
-      count: 100,
-      name: "счет 3",
-    },
-  ]);
+  const [count, setCount] = useState(
+    JSON.parse(localStorage.getItem("counts")) || [
+      {
+        id: 1,
+        count: 100,
+        name: "счет 1",
+      },
+      {
+        id: 2,
+        count: 100,
+        name: "счет 2",
+      },
+      {
+        id: 3,
+        count: 100,
+        name: "счет 3",
+      },
+    ]
+  );
+  useEffect(() => {
+    localStorage.setItem("counts", JSON.stringify(count));
+  }, [count]);
+
   const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
   const [modalAdd, setModalAdd] = useState(false);
   const [state, setState] = useState(0);
@@ -118,7 +125,9 @@ function App() {
         />
         <Input
           value={newCount.count}
-          onChange={(e) => setNewCount({ ...newCount, count: e.target.value })}
+          onChange={(e) =>
+            setNewCount({ ...newCount, count: Number(e.target.value) })
+          }
           type="number"
           placeholder="Начальный капитал"
           className="input mb-10"
