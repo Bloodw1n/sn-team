@@ -27,6 +27,7 @@ code {
   background-color: #bebebe;
   box-shadow: 4px 4px 9px rgba(198, 198, 198, 0.36);
   cursor: grab;
+  flex-direction: column;
 }
 
 .modal {
@@ -82,8 +83,8 @@ code {
 }
 
 .createCountBtn:hover {
-  height: 120px;
-  width: 120px;
+  height: 105px;
+  width: 105px;
 }
 
 .button__form {

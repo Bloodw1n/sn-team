@@ -1,5 +1,4 @@
 export const calcCount = (sender, reciver, sum) => {
-  console.log("sender", sender);
   if (sum >= sender.count) {
     throw new Error("Не хватает средств");
   }

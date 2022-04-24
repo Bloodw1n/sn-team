@@ -1,4 +1,3 @@
-import userEvent from "@testing-library/user-event";
 import React, { useState, useEffect } from "react";
 import Basket from "./componets/Busket";
 import Counter from "./componets/Counter";
@@ -7,35 +6,39 @@ import { EMPTY_COUNT } from "./componets/model/Count";
 import { calcCount } from "./componets/service";
 import Button from "./componets/UI/Button";
 import Input from "./componets/UI/Input";
+import { Count } from "./componets/model/Count";
 
 function App() {
-  const [count, setCount] = useState(
-    JSON.parse(localStorage.getItem("counts")) || [
-      {
-        id: 1,
-        count: 100,
-        name: "счет 1",
-      },
-      {
-        id: 2,
-        count: 100,
-        name: "счет 2",
-      },
-      {
-        id: 3,
-        count: 100,
-        name: "счет 3",
-      },
-    ]
-  );
+  const factoryCount = () => {
+    const data = JSON.parse(localStorage.getItem("counts"));
+    if (data === null) {
+      return [
+        new Count(1, "счет 1", 100),
+        new Count(2, "счет 2", 100),
+        new Count(3, "счет 3", 100),
+      ];
+    }
+    const newCount = [];
+    data.forEach((el) => {
+      newCount.push(new Count(el.id, el.name, el.count));
+    });
+    return newCount;
+  };
+
+  const [count, setCount] = useState(factoryCount());
+
   useEffect(() => {
-    localStorage.setItem("counts", JSON.stringify(count));
+    const data = [];
+    count.forEach((el) => {
+      data.push(el.convert());
+    });
+    localStorage.setItem("counts", JSON.stringify(data));
   }, [count]);
 
   const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
   const [modalAdd, setModalAdd] = useState(false);
   const [state, setState] = useState(0);
-  const [newCount, setNewCount] = useState({ name: "", count: "" });
+  const [newCount, setNewCount] = useState(new Count(-1, "", 0));
 
   const [transaction, setTransaction] = useState({
     sender: EMPTY_COUNT,
@@ -71,6 +74,8 @@ function App() {
       );
       updateStateCount(resCalc.sender);
       updateStateCount(resCalc.reciver);
+      setCount([...count]);
+      localStorage.setItem("counts", JSON.stringify(count));
     } catch (error) {
       console.log(error);
     }
@@ -82,10 +87,17 @@ function App() {
     setTransactionSum(Number(e.target.value));
   };
 
+  const changeName = (newName, idCount) => {
+    let newState = count;
+    const index = newState.findIndex((el) => el.id == idCount);
+    newState[index].name = newName;
+    setCount(newState);
+  };
+
   const createCount = () => {
     const newId = count[count.length - 1].id + 1;
-    setCount([...count, { ...newCount, id: newId }]);
-    setNewCount({ name: "", count: "" });
+    setCount([...count, new Count(newId, newCount.name, newCount.count)]);
+    setNewCount(new Count(-1, "", ""));
     setModalAdd(false);
   };
 
@@ -96,13 +108,13 @@ function App() {
   return (
     <div className="App mt-50 d-flex justify-center">
       <div className="counts d-flex justify-center flex-wrap">
-        {count.map((item, index) => (
+        {count.map((item) => (
           <Counter
             count={item}
-            name={index + 1}
             setSender={setTransactionSender}
             setReciver={setTransactionReciver}
             setModel={setModalActiveTransaction}
+            changeName={changeName}
           />
         ))}
       </div>
@@ -115,7 +127,6 @@ function App() {
       </div>
 
       <Modal active={modalAdd} setActive={setModalAdd}>
-        <form action=""></form>
         <Input
           value={newCount.name}
           onChange={(e) => setNewCount({ ...newCount, name: e.target.value })}
