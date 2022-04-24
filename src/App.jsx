@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Basket from "./componets/Busket";
 import Counter from "./componets/Counter";
 import Modal from "./componets/Modal";
 import { EMPTY_COUNT } from "./componets/model/Count";
@@ -24,8 +25,10 @@ function App() {
       name: "счет 3",
     },
   ]);
-
-  const [modalActive, setModalActive] = useState(false);
+  const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
+  const [modalAdd, setModalAdd] = useState(false);
+  const [state, setState] = useState(0);
+  const [newCount, setNewCount] = useState({ name: "", count: "" });
 
   const [transaction, setTransaction] = useState({
     sender: EMPTY_COUNT,
@@ -59,7 +62,6 @@ function App() {
         transaction.reciver,
         transaction.sum
       );
-      console.log(resCalc);
       updateStateCount(resCalc.sender);
       updateStateCount(resCalc.reciver);
     } catch (error) {
@@ -67,26 +69,21 @@ function App() {
     }
   };
 
-  const [state, setState] = useState(0);
-
-  const change = (e) => {
+  const changeCount = (e) => {
     e.preventDefault();
-    // if (num.test(e.target.value)) {
-    //   setState(e.target.value);
-    //   setSum(e.target.value);
-    // }
     setState(e.target.value);
     setTransactionSum(Number(e.target.value));
   };
 
-  const [newCount, setNewCount] = useState({ name: "", count: "" });
-
   const createCount = () => {
-    setCount([...count, { ...newCount, id: Date.now() }]);
+    const newId = count[count.length - 1].id + 1;
+    setCount([...count, { ...newCount, id: newId }]);
     setNewCount({ name: "", count: "" });
-    setModalActive(false);
+    setModalAdd(false);
+  };
 
-    console.log(newCount);
+  const removeCount = () => {
+    setCount(count.filter((item) => item.id !== transaction.sender.id));
   };
 
   return (
@@ -98,22 +95,20 @@ function App() {
             name={index + 1}
             setSender={setTransactionSender}
             setReciver={setTransactionReciver}
-            setModel={setModalActive}
+            setModel={setModalActiveTransaction}
           />
         ))}
       </div>
       <div className="d-flex flex-column">
-        <Button
-          className={"createCountBtn"}
-          onClick={() => setModalActive(true)}
-        >
+        <Button className={"createCountBtn"} onClick={() => setModalAdd(true)}>
           Создать счет
         </Button>
         <Button className={"createCountBtn"}>История переводов</Button>
-        <span>Здесь будет корзина</span>
+        <Basket removeCount={removeCount} />
       </div>
 
-      <Modal active={modalActive} setActive={setModalActive}>
+      <Modal active={modalAdd} setActive={setModalAdd}>
+        <form action=""></form>
         <Input
           value={newCount.name}
           onChange={(e) => setNewCount({ ...newCount, name: e.target.value })}
@@ -124,7 +119,7 @@ function App() {
         <Input
           value={newCount.count}
           onChange={(e) => setNewCount({ ...newCount, count: e.target.value })}
-          type="text"
+          type="number"
           placeholder="Начальный капитал"
           className="input mb-10"
         />
@@ -132,17 +127,21 @@ function App() {
           Создать счет
         </Button>
       </Modal>
-      {/* Придумать условие отрисовки */}
-      {/* <Modal active={modalActive} setActive={setModalActive}>
+      <Modal
+        active={modalActiveTransaction}
+        setActive={setModalActiveTransaction}
+      >
         <Input
           value={state}
           placeholder="Сумма..."
           type="text"
           className="input mb-10 text-center"
-          onChange={change}
+          onChange={changeCount}
         />
-        <button onClick={calc}>Перевести на выбранный счет</button>
-      </Modal> */}
+        <Button className="button__form" onClick={calc}>
+          Перевести на выбранный счет
+        </Button>
+      </Modal>
     </div>
   );
 }

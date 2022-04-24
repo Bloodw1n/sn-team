@@ -3,7 +3,7 @@ const Counter = ({ count, setSender, setReciver, setModel }) => {
     setSender(count);
   };
 
-  const dragEndHeandler = (e) => {
+  const dragEnterHeandler = (e) => {
     e.preventDefault();
   };
 
@@ -26,7 +26,7 @@ const Counter = ({ count, setSender, setReciver, setModel }) => {
       className="count"
       draggable={true}
       onDragStart={(e) => dragStartHeadler(e)}
-      onDragEnd={(e) => dragEndHeandler(e)}
+      onDragEnter={(e) => dragEnterHeandler(e)}
       onDragLeave={(e) => dragLeaveHeandler(e)}
       onDragOver={(e) => dragOverHeandler(e)}
       onDrop={(e) => dropHeandler(e)}
