@@ -113,8 +113,8 @@ function App() {
           },
         ])
       );
-      localStorage.setItem("counts", JSON.stringify(count));
 
+      localStorage.setItem("counts", JSON.stringify(count));
       setTransaction({
         sender: EMPTY_COUNT,
         reciver: EMPTY_COUNT,
@@ -162,16 +162,21 @@ function App() {
           />
         ))}
       </div>
-      <div className="nav d-flex flex-column">
-        <Button className={"createCountBtn"} onClick={() => setModalAdd(true)}>
-          Создать счет
-        </Button>
-        <Button
-          className={"createCountBtn"}
-          onClick={() => setModalHistory(true)}
-        >
-          История переводов
-        </Button>
+      <div className="d-flex flex-column">
+        <div className="nav d-flex flex-column">
+          <Button
+            className={"createCountBtn"}
+            onClick={() => setModalAdd(true)}
+          >
+            Создать счет
+          </Button>
+          <Button
+            className={"createCountBtn"}
+            onClick={() => setModalHistory(true)}
+          >
+            История переводов
+          </Button>
+        </div>
         <Basket removeCount={removeCount} />
       </div>
       <Modal active={modalHistory} setActive={setModalHistory}>
