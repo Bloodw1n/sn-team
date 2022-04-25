@@ -8,8 +8,8 @@ Stack:
 - Classes (ES6)
 
 Steps to start the project:
-#### `git clone https://github.com/Bloodw1n/React-sneakers.git`
-#### `cd React-sneakers`
+#### `git clone https://github.com/Bloodw1n/sn-team.git`
+#### `cd sn-team`
 #### `npm install`
 #### `npm run build`
 #### `npm run start`
