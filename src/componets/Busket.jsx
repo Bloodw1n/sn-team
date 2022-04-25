@@ -17,6 +17,7 @@ const Basket = ({ removeCount }) => {
       className="trashImg"
       onDragOver={(e) => dragOverHeandler(e)}
       onDrop={(e) => dropHeandler(e)}
+      draggable={false}
     />
   );
 };
