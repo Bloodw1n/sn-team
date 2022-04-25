@@ -16,7 +16,4 @@ const Modal = ({ active, setActive, children }) => {
   );
 };
 
-//написать регулярное ваыражени для проверки строки на цаифры
-//const num = new RegExp("+[0-9]");
-
 export default Modal;

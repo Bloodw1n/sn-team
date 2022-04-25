@@ -3,7 +3,7 @@ import Modal from "./Modal";
 import Button from "./UI/Button";
 import Input from "./UI/Input";
 
-const Counter = ({ count, setSender, setReciver, setModel, changeName }) => {
+const Counter = ({ count, setSender, setReciver, changeName }) => {
   const dragStartHeadler = (e) => {
     setSender(count);
   };
@@ -14,7 +14,6 @@ const Counter = ({ count, setSender, setReciver, setModel, changeName }) => {
 
   const dropHeandler = (e) => {
     e.preventDefault();
-    setModel(true);
     setReciver(count);
   };
 
