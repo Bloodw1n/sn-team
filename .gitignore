@@ -4,7 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
-TZ.doc
+.doc
+.txt
 
 # testing
 /coverage
