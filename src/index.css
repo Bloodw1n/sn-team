@@ -66,6 +66,10 @@ code {
   transform: scale(1);
 }
 
+.nav {
+  width: 105px;
+}
+
 .createCountBtn {
   height: 100px;
   width: 100px;
@@ -101,4 +105,8 @@ code {
   padding: 5px 15px;
   margin: 5px 0px;
   border: 1px solid teal;
+}
+
+.table td {
+  text-align: center;
 }

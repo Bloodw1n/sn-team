@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import Basket from "./componets/Busket";
 import Counter from "./componets/Counter";
 import Modal from "./componets/Modal";
-import { EMPTY_COUNT } from "./componets/model/Count";
+import { EMPTY_COUNT } from "./model/Count";
 import { calcCount } from "./componets/service";
 import Button from "./componets/UI/Button";
 import Input from "./componets/UI/Input";
-import { Count } from "./componets/model/Count";
+import { Count } from "./model/Count";
 
 function App() {
   const factoryCount = () => {
@@ -26,6 +26,33 @@ function App() {
   };
 
   const [count, setCount] = useState(factoryCount());
+  const [newCount, setNewCount] = useState(new Count(-1, "", 0));
+  const [moneyOrder, setMoneyOrder] = useState([]);
+  useEffect(() => {
+    if (localStorage.getItem("transactions") !== null) {
+      setMoneyOrder(JSON.parse(localStorage.getItem("transactions")));
+    }
+  }, []);
+
+  const [state, setState] = useState(0);
+  const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
+  const [modalAdd, setModalAdd] = useState(false);
+  const [modalHistory, setModalHistory] = useState(false);
+  const [transaction, setTransaction] = useState({
+    sender: EMPTY_COUNT,
+    reciver: EMPTY_COUNT,
+    sum: 0,
+  });
+
+  useEffect(() => {
+    if (
+      transaction.sender.id != transaction.reciver.id &&
+      transaction.sender.id !== -1 &&
+      transaction.reciver.id !== -1
+    ) {
+      setModalActiveTransaction(true);
+    }
+  }, [transaction]);
 
   useEffect(() => {
     const data = [];
@@ -34,17 +61,6 @@ function App() {
     });
     localStorage.setItem("counts", JSON.stringify(data));
   }, [count]);
-
-  const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
-  const [modalAdd, setModalAdd] = useState(false);
-  const [state, setState] = useState(0);
-  const [newCount, setNewCount] = useState(new Count(-1, "", 0));
-
-  const [transaction, setTransaction] = useState({
-    sender: EMPTY_COUNT,
-    reciver: EMPTY_COUNT,
-    sum: 0,
-  });
 
   const setTransactionSender = (idNewSender) => {
     setTransaction({ ...transaction, sender: idNewSender });
@@ -74,8 +90,36 @@ function App() {
       );
       updateStateCount(resCalc.sender);
       updateStateCount(resCalc.reciver);
+      setModalActiveTransaction(false);
       setCount([...count]);
+
+      setMoneyOrder([
+        ...moneyOrder,
+        {
+          reciver: resCalc.reciver.name,
+          sender: resCalc.sender.name,
+          sum: transaction.sum,
+        },
+      ]);
+
+      localStorage.setItem(
+        "transactions",
+        JSON.stringify([
+          ...moneyOrder,
+          {
+            reciver: resCalc.reciver.name,
+            sender: resCalc.sender.name,
+            sum: transaction.sum,
+          },
+        ])
+      );
       localStorage.setItem("counts", JSON.stringify(count));
+
+      setTransaction({
+        sender: EMPTY_COUNT,
+        reciver: EMPTY_COUNT,
+        sum: 0,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -118,13 +162,40 @@ function App() {
           />
         ))}
       </div>
-      <div className="d-flex flex-column">
+      <div className="nav d-flex flex-column">
         <Button className={"createCountBtn"} onClick={() => setModalAdd(true)}>
           Создать счет
         </Button>
-        <Button className={"createCountBtn"}>История переводов</Button>
+        <Button
+          className={"createCountBtn"}
+          onClick={() => setModalHistory(true)}
+        >
+          История переводов
+        </Button>
         <Basket removeCount={removeCount} />
       </div>
+      <Modal active={modalHistory} setActive={setModalHistory}>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Отправитель</th>
+              <th>Получатель</th>
+              <th>Сумма перевода</th>
+            </tr>
+          </thead>
+          <tbody>
+            {moneyOrder.map((item) => {
+              return (
+                <tr>
+                  <td>{item.sender}</td>
+                  <td>{item.reciver}</td>
+                  <td>{item.sum}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </Modal>
 
       <Modal active={modalAdd} setActive={setModalAdd}>
         <Input
