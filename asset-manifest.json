@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Bloodw1n/sn-team.git/static/css/main.04fb11ba.css",
+    "main.js": "/Bloodw1n/sn-team.git/static/js/main.91a2d3a4.js",
+    "index.html": "/Bloodw1n/sn-team.git/index.html",
+    "main.04fb11ba.css.map": "/Bloodw1n/sn-team.git/static/css/main.04fb11ba.css.map",
+    "main.91a2d3a4.js.map": "/Bloodw1n/sn-team.git/static/js/main.91a2d3a4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.04fb11ba.css",
+    "static/js/main.91a2d3a4.js"
+  ]
+}
