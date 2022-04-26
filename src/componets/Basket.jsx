@@ -12,7 +12,7 @@ const Basket = ({ removeCount }) => {
 
   return (
     <img
-      src="/img/trash-2.svg"
+      src="img/trash-2.svg"
       alt="trash"
       className="trashImg"
       onDragOver={(e) => dragOverHeandler(e)}

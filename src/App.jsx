@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Basket from "./componets/Busket";
+import Basket from "./componets/Basket";
 import Counter from "./componets/Counter";
 import Modal from "./componets/Modal";
 import { EMPTY_COUNT } from "./model/Count";

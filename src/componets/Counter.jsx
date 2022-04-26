@@ -33,7 +33,7 @@ const Counter = ({ count, setSender, setReciver, changeName }) => {
         <br />
         {count.name}
         <img
-          src="/img/edit.png"
+          src="img/edit.png"
           alt="edit"
           className="cu-p"
           onClick={() => setModalEdit(true)}
