@@ -9,6 +9,19 @@ import Input from "./componets/UI/Input";
 import { Count } from "./model/Count";
 
 function App() {
+  const [count, setCount] = useState(factoryCount());
+  const [newCount, setNewCount] = useState(new Count(-1, "", 0));
+  const [moneyOrder, setMoneyOrder] = useState([]);
+  const [state, setState] = useState(0);
+  const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
+  const [modalAdd, setModalAdd] = useState(false);
+  const [modalHistory, setModalHistory] = useState(false);
+  const [transaction, setTransaction] = useState({
+    sender: EMPTY_COUNT,
+    reciver: EMPTY_COUNT,
+    sum: 0,
+  });
+
   const factoryCount = () => {
     const data = JSON.parse(localStorage.getItem("counts"));
     if (data === null) {
@@ -25,24 +38,11 @@ function App() {
     return newCount;
   };
 
-  const [count, setCount] = useState(factoryCount());
-  const [newCount, setNewCount] = useState(new Count(-1, "", 0));
-  const [moneyOrder, setMoneyOrder] = useState([]);
   useEffect(() => {
     if (localStorage.getItem("transactions") !== null) {
       setMoneyOrder(JSON.parse(localStorage.getItem("transactions")));
     }
   }, []);
-
-  const [state, setState] = useState(0);
-  const [modalActiveTransaction, setModalActiveTransaction] = useState(false);
-  const [modalAdd, setModalAdd] = useState(false);
-  const [modalHistory, setModalHistory] = useState(false);
-  const [transaction, setTransaction] = useState({
-    sender: EMPTY_COUNT,
-    reciver: EMPTY_COUNT,
-    sum: 0,
-  });
 
   useEffect(() => {
     if (
@@ -223,6 +223,7 @@ function App() {
           Создать счет
         </Button>
       </Modal>
+
       <Modal
         active={modalActiveTransaction}
         setActive={setModalActiveTransaction}
